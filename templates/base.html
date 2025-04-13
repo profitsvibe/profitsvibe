@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/favicons/site.webmanifest' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicons/favicon.ico' %}">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Money Transfer | Send & Receive Money{% endblock %}</title>
+
+    <!-- Flowbite CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.0/dist/cdn.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Head Block -->
+    {% block head %}{% endblock %}
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Gold color palette */
+        :root {
+            --gold-50: #fbf7ed;
+            --gold-100: #f5ebcf;
+            --gold-200: #eed9a5;
+            --gold-300: #e6c273;
+            --gold-400: #dfac4d;
+            --gold-500: #d89531; /* Medium gold */
+            --gold-600: #be7422;
+            --gold-700: #9c571e;
+            --gold-800: #7d451f;
+            --gold-900: #663a1d; /* Dark gold */
+            --gold-950: #3a1e0f;
+        }
+
+        .gradient-primary {
+            background: linear-gradient(135deg, #be7422 0%, #7d451f 100%);
+        }
+
+        .gradient-secondary {
+            background: linear-gradient(135deg, #d89531 0%, #663a1d 100%);
+        }
+
+        .shadow-custom {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Enhanced Navigation Styles with Dark Gold Theme */
+        .nav-link {
+            padding: 0.625rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(to right, var(--gold-100), var(--gold-200));
+            color: var(--gold-800);
+            border-color: var(--gold-300);
+            box-shadow: 0 3px 6px rgba(190, 116, 34, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .nav-link-active {
+            background: linear-gradient(to right, var(--gold-700), var(--gold-900));
+            color: white !important;
+            font-weight: 600;
+            border-color: var(--gold-900);
+            box-shadow: 0 3px 8px rgba(102, 58, 29, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-link-active:hover {
+            background: linear-gradient(to right, var(--gold-800), var(--gold-900));
+            color: white !important;
+            border-color: var(--gold-900);
+            box-shadow: 0 4px 10px rgba(102, 58, 29, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.625rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .nav-link-icon {
+            height: 1rem;
+            width: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .nav-text {
+            transition: all 0.3s ease-in-out;
+            font-weight: 500;
+        }
+
+        /* Glowing effect for active nav links */
+        .nav-link-active .nav-icon-wrapper {
+            color: white;
+            filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+        }
+
+        .nav-link-active .nav-link-icon {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .nav-link:not(.nav-link-active):hover .nav-link-icon {
+            color: var(--gold-700);
+            transform: scale(1.15);
+        }
+
+        /* Enhanced Authentication Buttons */
+        .auth-btn {
+            font-weight: 500;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+        }
+
+        .auth-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(190, 116, 34, 0.2);
+        }
+
+        .login-btn {
+            background-color: white;
+            color: var(--gold-700);
+            border: 1px solid var(--gold-300);
+            padding: 0.5rem 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .login-btn:hover {
+            border-color: var(--gold-400);
+            color: var(--gold-800);
+            box-shadow: 0 3px 6px rgba(190, 116, 34, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .signup-btn {
+            background: linear-gradient(to right, var(--gold-700), var(--gold-900));
+            color: white;
+            border: 1px solid var(--gold-800);
+            padding: 0.5rem 1.25rem;
+            box-shadow: 0 2px 5px rgba(102, 58, 29, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .signup-btn:hover {
+            background: linear-gradient(to right, var(--gold-800), var(--gold-900));
+            box-shadow: 0 4px 8px rgba(102, 58, 29, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Platform links */
+        .platform-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-link {
+            position: relative;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--gold-700);
+            background-color: var(--gold-50);
+            transition: all 0.3s ease;
+        }
+
+        .platform-link:hover {
+            background-color: var(--gold-100);
+            color: var(--gold-900);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 1023px) {
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+                padding: 0.75rem 1rem;
+            }
+
+            .auth-btn-mobile {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem;
+                margin-top: 0.5rem;
+            }
+
+            .platform-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Desktop adjustments - fix for consistent spacing */
+        @media (min-width: 1024px) {
+            ul.lg\:space-x-3 > li {
+                margin-right: 0.75rem;
+            }
+
+            /* Remove right margin from last item */
+            ul.lg\:space-x-3 > li:last-child {
+                margin-right: 0;
+            }
+        }
+
+        /* Button styles */
+        .btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-outline {
+            font-weight: 500;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+        }
+
+        .btn-primary:focus, .btn-secondary:focus, .btn-success:focus, .btn-danger:focus, .btn-outline:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Primary button - gold outline style */
+        .btn-primary {
+            color: var(--gold-700);
+            background-color: white;
+            border: 1px solid var(--gold-300);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--gold-50);
+        }
+
+        .btn-primary:focus {
+            box-shadow: 0 0 0 3px rgba(216, 149, 49, 0.2);
+        }
+
+        /* Secondary button - gray outline style */
+        .btn-secondary {
+            color: #4b5563;
+            background-color: white;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f9fafb;
+        }
+
+        .btn-secondary:focus {
+            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.4);
+        }
+
+        /* Success button */
+        .btn-success {
+            color: #047857;
+            background-color: white;
+            border: 1px solid #a7f3d0;
+        }
+
+        .btn-success:hover {
+            background-color: #ecfdf5;
+        }
+
+        .btn-success:focus {
+            box-shadow: 0 0 0 3px rgba(167, 243, 208, 0.4);
+        }
+
+        /* Danger button */
+        .btn-danger {
+            color: #b91c1c;
+            background-color: white;
+            border: 1px solid #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background-color: #fee2e2;
+        }
+
+        .btn-danger:focus {
+            box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.4);
+        }
+
+        /* Filled style - for primary CTAs */
+        .btn-filled {
+            color: white;
+            background-color: var(--gold-600);
+            border: 1px solid var(--gold-600);
+            font-weight: 500;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-filled:hover {
+            background-color: var(--gold-700);
+            border-color: var(--gold-700);
+        }
+
+        .btn-filled:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(190, 116, 34, 0.3);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+        }
+
+        .input-field {
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            color: #111827;
+            font-size: 0.875rem;
+            border-radius: 0.5rem;
+            display: block;
+            width: 100%;
+            padding: 0.625rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: var(--gold-500);
+            border-color: var(--gold-500);
+        }
+
+        .label-text {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Main Navigation -->
+    <nav class="bg-white border-b border-gray-200 px-4 py-3 fixed left-0 right-0 top-0 z-50 shadow-sm" x-data="{ mobileMenuOpen: false }">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-7xl">
+            <div class="flex justify-start items-center">
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="flex items-center">
+                {% else %}
+                <a href="{% url 'home' %}" class="flex items-center">
+                {% endif %}
+                    <span class="self-center text-2xl font-bold whitespace-nowrap" style="background: linear-gradient(to right, var(--gold-600), var(--gold-800)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Profitsvibe</span>
+                </a>
+            </div>
+
+            <div class="flex items-center lg:order-2">
+                {% if user.is_authenticated %}
+                    <!-- Notifications Dropdown -->
+                    <div class="relative mr-3" x-data="{ notificationsOpen: false }">
+                        <button @click="notificationsOpen = !notificationsOpen" class="p-2 text-gray-500 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gold-200 relative">
+                            <span class="sr-only">View notifications</span>
+                            <i class="far fa-bell w-5 h-5 text-gray-600"></i>
+                            <!-- Notification Badge -->
+                            <span class="absolute top-0 right-0 h-2 w-2 mt-1 mr-1 rounded-full bg-gold-500 animate-pulse" style="background-color: var(--gold-500);"></span>
+                        </button>
+
+                        <!-- Notifications Panel -->
+                        <div x-show="notificationsOpen" @click.away="notificationsOpen = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg py-2 z-50" style="display: none;">
+                            <div class="px-4 py-2 border-b border-gray-200">
+                                <h3 class="text-sm font-semibold text-gray-900">Notifications</h3>
+                            </div>
+
+                            <div class="max-h-72 overflow-y-auto">
+                                <!-- Sample Notification -->
+                                <a href="#" class="flex px-4 py-3 hover:bg-gray-50 transition-colors duration-150 ease-in-out">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: var(--gold-100);">
+                                            <i class="fas fa-dollar-sign" style="color: var(--gold-600);"></i>
+                                        </div>
+                                    </div>
+                                    <div class="ml-3 w-0 flex-1">
+                                        <p class="text-sm font-medium text-gray-900">You received $25.00</p>
+                                        <p class="text-xs text-gray-500 mt-1">From: John Doe • 2 hours ago</p>
+                                    </div>
+                                </a>
+
+                                <!-- Empty State -->
+                                <div class="px-4 py-6 text-center text-sm text-gray-500">
+                                    No new notifications
+                                </div>
+                            </div>
+
+                            <div class="px-4 py-2 border-t border-gray-200">
+                                <a href="#" class="text-xs font-medium hover:text-gold-800" style="color: var(--gold-700);">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="relative" x-data="{ userMenuOpen: false }">
+                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-gold-200 transition duration-200 ease-in-out" style="--focus-ring-color: var(--gold-200);">
+                            <img class="h-8 w-8 rounded-full object-cover border-2" style="border-color: var(--gold-200);" src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" alt="{{ user.username }}" onerror="this.src='{% static 'images/avatar-placeholder.png' %}';this.onerror='';">
+                            <span class="ml-2 hidden md:block">{{ user.get_full_name|default:user.username }}</span>
+                            <i class="fas fa-chevron-down ml-1 text-xs text-gray-400"></i>
+                        </button>
+
+                        <div x-show="userMenuOpen" @click.away="userMenuOpen = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg origin-top-right z-50" style="display: none;">
+                            <div class="py-1 bg-white rounded-md shadow-xs">
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <p class="text-sm font-semibold text-gray-900">{{ user.get_full_name|default:user.username }}</p>
+                                    <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+                                </div>
+                                <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-tachometer-alt mr-2 text-gray-400"></i> Dashboard
+                                </a>
+                                <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="far fa-user-circle mr-2 text-gray-400"></i> Profile
+                                </a>
+                                <a href="{% url 'settings' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-cog mr-2 text-gray-400"></i> Settings
+                                </a>
+                                <form action="{% url 'logout' %}" method="post" class="border-t border-gray-100">
+                                    {% csrf_token %}
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Sign out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars w-6 h-6" :class="{'hidden': mobileMenuOpen, 'block': !mobileMenuOpen}"></i>
+                        <i class="fas fa-times w-6 h-6" :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}"></i>
+                    </button>
+                {% else %}
+                    <div class="flex items-center lg:order-2">
+                        <a href="{% url 'login' %}" class="auth-btn login-btn mr-2">
+                            <span>Log in</span>
+                        </a>
+                        <a href="{% url 'register' %}" class="auth-btn signup-btn">
+                            <span>Sign up</span>
+                        </a>
+
+                        <!-- Mobile menu button -->
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                            <span class="sr-only">Open main menu</span>
+                            <i class="fas fa-bars w-6 h-6" :class="{'hidden': mobileMenuOpen, 'block': !mobileMenuOpen}"></i>
+                            <i class="fas fa-times w-6 h-6" :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}"></i>
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" :class="{'!flex flex-col': mobileMenuOpen, 'hidden': !mobileMenuOpen}">
+                <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-3 lg:mt-0">
+                    {% if user.is_authenticated %}
+                    <!-- Only show these links when logged in -->
+                    <li class="my-1 lg:my-0">
+                        <a href="{% url 'dashboard' %}" class="nav-link block {% if 'dashboard' in request.path %}nav-link-active{% endif %}">
+                            <span class="nav-icon-wrapper">
+                                <i class="fas fa-chart-line nav-link-icon"></i>
+                            </span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="my-1 lg:my-0">
+                        <a href="{% url 'send_money' %}" class="nav-link block {% if 'send_money' in request.path %}nav-link-active{% endif %}">
+                            <span class="nav-icon-wrapper">
+                                <i class="fas fa-paper-plane nav-link-icon"></i>
+                            </span>
+                            <span class="nav-text">Send Money</span>
+                        </a>
+                    </li>
+                    <li class="my-1 lg:my-0">
+                        <a href="{% url 'request_money' %}" class="nav-link block {% if 'request_money' in request.path %}nav-link-active{% endif %}">
+                            <span class="nav-icon-wrapper">
+                                <i class="fas fa-hand-holding-usd nav-link-icon"></i>
+                            </span>
+                            <span class="nav-text">Request Money</span>
+                        </a>
+                    </li>
+                    <li class="my-1 lg:my-0">
+                        <a href="{% url 'transaction_history' %}" class="nav-link block {% if 'transaction_history' in request.path %}nav-link-active{% endif %}">
+                            <span class="nav-icon-wrapper">
+                                <i class="fas fa-history nav-link-icon"></i>
+                            </span>
+                            <span class="nav-text">Transactions</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Mobile View: User Links -->
+                {% if user.is_authenticated and mobileMenuOpen %}
+                <div class="mt-4 pt-4 border-t border-gray-200 lg:hidden">
+                    <a href="{% url 'profile' %}" class="block py-2 text-base font-medium text-gray-600 hover:text-gray-900">
+                        <i class="far fa-user-circle mr-2" style="color: var(--gold-500);"></i> Profile
+                    </a>
+                    <a href="{% url 'settings' %}" class="block py-2 text-base font-medium text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-cog mr-2" style="color: var(--gold-500);"></i> Settings
+                    </a>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="block py-2 text-base font-medium text-red-600 hover:text-red-700 w-full text-left">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Sign out
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+
+                <!-- Mobile Authentication Buttons -->
+                {% if not user.is_authenticated and mobileMenuOpen %}
+                <div class="mt-4 pt-4 border-t border-gray-200 lg:hidden flex flex-col">
+                    <a href="{% url 'login' %}" class="auth-btn login-btn auth-btn-mobile mb-2">
+                        <span>Log in</span>
+                    </a>
+                    <a href="{% url 'register' %}" class="auth-btn signup-btn auth-btn-mobile">
+                        <span>Sign up</span>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="flex-grow pt-20">
+        <!-- Flash Messages -->
+        {% if messages %}
+            <div class="container mx-auto px-4 my-4">
+                {% for message in messages %}
+                    <div id="alert-{{ forloop.counter }}" class="flex p-4 mb-4 rounded-lg" role="alert"
+                        style="{% if message.tags == 'success' %}background-color: #d1fae5; color: #047857;{% elif message.tags == 'error' %}background-color: #fee2e2; color: #b91c1c;{% elif message.tags == 'warning' %}background-color: #fef3c7; color: #92400e;{% else %}background-color: var(--gold-100); color: var(--gold-700);{% endif %}">
+                        <div class="flex-shrink-0">
+                            {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle w-5 h-5"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="fas fa-exclamation-circle w-5 h-5"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-triangle w-5 h-5"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle w-5 h-5"></i>
+                            {% endif %}
+                        </div>
+                        <div class="ml-3 text-sm font-medium">
+                            {{ message }}
+                        </div>
+                        <button type="button" class="ml-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2 p-1.5 inline-flex h-8 w-8"
+                            style="{% if message.tags == 'success' %}background-color: #d1fae5; color: #047857;{% elif message.tags == 'error' %}background-color: #fee2e2; color: #b91c1c;{% elif message.tags == 'warning' %}background-color: #fef3c7; color: #92400e;{% else %}background-color: var(--gold-100); color: var(--gold-600);{% endif %}"
+                            data-dismiss-target="#alert-{{ forloop.counter }}" aria-label="Close">
+                            <span class="sr-only">Close</span>
+                            <i class="fas fa-times w-5 h-5"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-6">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-8">
+        <!-- Platform Links Section -->
+        <div class="border-t border-gray-200 px-4 sm:px-6 lg:px-8">
+            <div class="py-8">
+                <p class="text-center text-sm font-medium text-gray-500 mb-5">Explore more from our other platforms:</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="https://crene.com" target="_blank" rel="noopener" class="px-5 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors">
+                        Crene
+                    </a>
+                    <a href="https://euphorie.com" target="_blank" rel="noopener" class="px-5 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors">
+                        Euphorie
+                    </a>
+                    <a href="https://diaryvault.com" target="_blank" rel="noopener" class="px-5 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors">
+                        DiaryVault
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="border-t border-gray-200 px-4 sm:px-6 lg:px-8">
+            <div class="py-6 flex flex-col md:flex-row md:justify-between md:items-center">
+                <p class="text-gray-500 text-sm order-2 md:order-1 text-center md:text-left mt-4 md:mt-0">
+                    &copy; 2025 Profitsvibe. All rights reserved.
+                </p>
+                <div class="flex justify-center md:justify-end space-x-6 order-1 md:order-2">
+                    <a href="#" class="text-gray-500 hover:text-gray-900 text-sm transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-900 text-sm transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-900 text-sm transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+
+    <!-- Additional Scripts Block -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

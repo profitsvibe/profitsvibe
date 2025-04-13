@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign up – Profitsvibe{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        background: #f8fdfc;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .login-card {
+        max-width: 400px;
+        margin: auto;
+        background: #fff;
+        border: 1px solid #f2f2f2;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        animation: fade-in-up 0.5s ease forwards;
+    }
+
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .login-header {
+        color: #995c16;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.25rem;
+        font-size: 1.75rem;
+    }
+
+    .login-subtext {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #7c470c;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        font-size: 0.95rem;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #d89531;
+        box-shadow: 0 0 0 2px rgba(216, 149, 49, 0.15);
+    }
+
+    .form-input.error {
+        border-color: #dc2626;
+        background-color: #fff1f2;
+    }
+
+    .error-msg {
+        color: #dc2626;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+
+    .info-msg {
+        font-size: 0.75rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+    }
+
+    .strength-indicator {
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        font-weight: 500;
+    }
+
+    .strength-weak {
+        color: #dc2626;
+    }
+
+    .strength-medium {
+        color: #d97706;
+    }
+
+    .strength-strong {
+        color: #16a34a;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 2rem 0 1.5rem;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #d6d3d1;
+    }
+
+    .divider span {
+        margin: 0 1rem;
+        font-size: 0.875rem;
+        color: #6b4a14;
+        font-weight: 500;
+    }
+
+    .social-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        padding: 0.6rem 1rem;
+        font-size: 0.875rem;
+        color: #374151;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+
+    .social-btn:hover {
+        background: #fafafa;
+    }
+
+    .submit-button {
+        width: 100%;
+        background-color: #b98134;
+        color: white;
+        border: none;
+        padding: 0.65rem;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #a86f28;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .submit-button:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    .bottom-text {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.875rem;
+        color: #7c470c;
+    }
+
+    .bottom-text a {
+        color: #5c3106;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .bottom-text a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="py-16 px-4">
+    <div class="login-card">
+        <h2 class="login-header">Create your account</h2>
+        <p class="login-subtext">Start sending and receiving money securely</p>
+
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="text-sm text-red-600 bg-red-50 border border-red-200 p-2 rounded mb-3">
+                <strong>Please correct the errors below:</strong><br>
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <!-- First + Last Name -->
+            <div style="display: flex; gap: 1rem;">
+                <div class="form-group" style="flex: 1;">
+                    <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                    <input type="text" name="{{ form.first_name.name }}" id="{{ form.first_name.id_for_label }}" class="form-input {% if form.first_name.errors %}error{% endif %}" value="{{ form.first_name.value|default:'' }}">
+                    {% if form.first_name.errors %}
+                    <p class="error-msg">{{ form.first_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                    <input type="text" name="{{ form.last_name.name }}" id="{{ form.last_name.id_for_label }}" class="form-input {% if form.last_name.errors %}error{% endif %}" value="{{ form.last_name.value|default:'' }}">
+                    {% if form.last_name.errors %}
+                    <p class="error-msg">{{ form.last_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-input {% if form.username.errors %}error{% endif %}" value="{{ form.username.value|default:'' }}">
+                {% if form.username.errors %}
+                <p class="error-msg">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" class="form-input {% if form.email.errors %}error{% endif %}" value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                <p class="error-msg">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                <input type="password" name="{{ form.password1.name }}" id="password1" class="form-input {% if form.password1.errors %}error{% endif %}">
+                {% if form.password1.errors %}
+                <p class="error-msg">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+                <p class="info-msg">Minimum 8 characters, include letters and numbers.</p>
+                <p id="password-strength" class="strength-indicator"></p>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" class="form-input {% if form.password2.errors %}error{% endif %}">
+                {% if form.password2.errors %}
+                <p class="error-msg">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Terms -->
+            <div class="form-group" style="margin-top: 0.75rem;">
+                <div style="display: flex; align-items: flex-start; font-size: 0.875rem; color: #6b4a14;">
+                    <input type="checkbox" id="terms" required style="margin-top: 4px; margin-right: 8px;">
+                    <label for="terms" style="line-height: 1.4;">
+                        I agree to the
+                        <a href="#" style="color: #b98134; text-decoration: underline;">Terms of Service</a>
+                        and
+                        <a href="#" style="color: #b98134; text-decoration: underline;">Privacy Policy</a>.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="submit-button mt-4">Create Account</button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider"><span>or continue with</span></div>
+
+        <!-- Social buttons -->
+        <div style="display: flex; gap: 1rem;">
+            <a href="#" class="social-btn"><i class="fab fa-google text-[#4285F4]"></i> Google</a>
+            <a href="#" class="social-btn"><i class="fab fa-facebook-f text-[#1877F2]"></i> Facebook</a>
+        </div>
+
+        <p class="bottom-text mt-6">
+            Already have an account? <a href="{% url 'login' %}">Log in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const passwordInput = document.getElementById('password1');
+    const strengthText = document.getElementById('password-strength');
+
+    passwordInput.addEventListener('input', function () {
+        const val = passwordInput.value;
+        let strength = '';
+        let className = '';
+
+        if (val.length < 6) {
+            strength = 'Weak';
+            className = 'strength-weak';
+        } else if (val.match(/[A-Za-z]/) && val.match(/[0-9]/)) {
+            if (val.length >= 8 && val.match(/[!@#$%^&*]/)) {
+                strength = 'Strong';
+                className = 'strength-strong';
+            } else {
+                strength = 'Medium';
+                className = 'strength-medium';
+            }
+        } else {
+            strength = 'Weak';
+            className = 'strength-weak';
+        }
+
+        strengthText.textContent = `Password Strength: ${strength}`;
+        strengthText.className = `strength-indicator ${className}`;
+    });
+</script>
+{% endblock %}

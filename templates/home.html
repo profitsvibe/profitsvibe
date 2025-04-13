@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Email Money Transfers Made Simple | Profitsvibe{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="pt-10 pb-16 md:pb-20">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                Send Money Using Just an <span style="background: linear-gradient(to right, var(--gold-600), var(--gold-800)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Email Address</span>
+            </h1>
+            <p class="text-base md:text-lg text-gray-600 mb-6 md:mb-8">
+                No account numbers. No routing codes. No complicated forms. Just enter an email address, specify the amount, and hit send. Money transfers have never been this simple.
+            </p>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100 mb-8">
+            <div class="flex flex-col md:flex-row items-center mb-6">
+                <div class="w-20 h-20 flex items-center justify-center rounded-full mb-4 md:mb-0 md:mr-6" style="background-color: var(--gold-100); color: var(--gold-600);">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                    </svg>
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Email-Based Transfers</h2>
+                    <p class="text-gray-600">
+                        With Profitsvibe, you only need the recipient's email address to send money. They'll receive a notification instantly, and the funds will be available for them to claim immediately.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 mt-6">
+                <a href="{% url 'register' %}" class="auth-btn signup-btn py-3 px-6 text-base flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Sign Up Free
+                </a>
+                <a href="{% url 'features' %}" class="auth-btn login-btn py-3 px-6 text-base flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Learn More
+                </a>
+            </div>
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm text-gray-500 max-w-3xl mx-auto">
+            <div class="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: #10b981;">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Secure Encryption</span>
+            </div>
+            <div class="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: #10b981;">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Instant Transfers</span>
+            </div>
+            <div class="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: #10b981;">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>No Hidden Fees</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-12 md:py-16 bg-gray-50 rounded-3xl my-6 px-4">
+    <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900">How Email Money Transfers Work</h2>
+        <p class="text-base md:text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
+            We've simplified the money transfer process to just a few clicks
+        </p>
+    </div>
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Step by Step Process -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 flex items-center justify-center rounded-full mb-4" style="background-color: var(--gold-100); color: var(--gold-600);">
+                        <span class="text-2xl font-bold">1</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Enter Email</h3>
+                    <p class="text-gray-600">
+                        Simply enter your recipient's email address - no need for account numbers or routing codes.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 flex items-center justify-center rounded-full mb-4" style="background-color: var(--gold-100); color: var(--gold-600);">
+                        <span class="text-2xl font-bold">2</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Specify Amount</h3>
+                    <p class="text-gray-600">
+                        Enter the amount you want to send and add an optional message or note.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 flex items-center justify-center rounded-full mb-4" style="background-color: var(--gold-100); color: var(--gold-600);">
+                        <span class="text-2xl font-bold">3</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Money Delivered</h3>
+                    <p class="text-gray-600">
+                        Recipient receives an email notification and can claim the funds instantly.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot/Mockup -->
+        <div class="bg-white p-6 rounded-xl shadow-md relative">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0 md:pr-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Seamless User Experience</h3>
+                    <p class="text-gray-600 mb-4">
+                        Our streamlined interface makes sending money as easy as sending an email. No complicated forms or processes.
+                    </p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">No need for bank account details</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Recipient doesn't need an account to receive funds</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Transfers complete in seconds, not days</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Secure transfer tracking and notifications</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 bg-gray-100 rounded-lg p-4">
+                    <div class="bg-white rounded-lg p-4 shadow-md border border-gray-200">
+                        <div class="border-b border-gray-200 pb-3 mb-4">
+                            <h4 class="text-lg font-medium text-gray-900">Send Money</h4>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Recipient's Email</label>
+                                <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" value="recipient@example.com" disabled>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500">$</span>
+                                    </div>
+                                    <input type="text" class="w-full pl-7 px-3 py-2 border border-gray-300 rounded-md" value="250.00" disabled>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Note (Optional)</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md" disabled>Thanks for lunch yesterday!</textarea>
+                            </div>
+                            <div>
+                                <button class="w-full py-2 px-4 rounded-md text-white font-medium" style="background: linear-gradient(to right, var(--gold-600), var(--gold-700));" disabled>Send Money</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-12 md:py-16 px-4">
+    <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Email Money Transfer Benefits</h2>
+        <p class="text-base md:text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
+            See why our email-based money transfer system makes financial transactions simpler than ever
+        </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        <!-- Feature 1 -->
+        <div class="card transition-all duration-300 hover:shadow-lg hover:border-gold-200 hover:transform hover:-translate-y-1" style="--hover-border-color: var(--gold-200);">
+            <div class="flex items-center mb-4">
+                <div class="rounded-full p-3 mr-3 flex-shrink-0" style="background-color: var(--gold-100);">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Instant Transfers</h3>
+            </div>
+            <p class="text-gray-600">
+                Money is sent and received instantly. No waiting periods or processing delays like traditional bank transfers.
+            </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card transition-all duration-300 hover:shadow-lg hover:border-gold-200 hover:transform hover:-translate-y-1" style="--hover-border-color: var(--gold-200);">
+            <div class="flex items-center mb-4">
+                <div class="rounded-full p-3 mr-3 flex-shrink-0" style="background-color: var(--gold-100);">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Simplified Security</h3>
+            </div>
+            <p class="text-gray-600">
+                Secure transfers without sharing bank details. Only an email address is needed to send money safely.
+            </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card transition-all duration-300 hover:shadow-lg hover:border-gold-200 hover:transform hover:-translate-y-1" style="--hover-border-color: var(--gold-200);">
+            <div class="flex items-center mb-4">
+                <div class="rounded-full p-3 mr-3 flex-shrink-0" style="background-color: var(--gold-100);">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                        <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Low or No Fees</h3>
+            </div>
+            <p class="text-gray-600">
+                Send money to friends and family for free. Only minimal fees apply for business or international transfers.
+            </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card transition-all duration-300 hover:shadow-lg hover:border-gold-200 hover:transform hover:-translate-y-1" style="--hover-border-color: var(--gold-200);">
+            <div class="flex items-center mb-4">
+                <div class="rounded-full p-3 mr-3 flex-shrink-0" style="background-color: var(--gold-100);">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Real-time Notifications</h3>
+            </div>
+            <p class="text-gray-600">
+                Both sender and recipient get instant notifications when money is sent, received, or claimed.
+            </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card transition-all duration-300 hover:shadow-lg hover:border-gold-200 hover:transform hover:-translate-y-1" style="--hover-border-color: var(--gold-200);">
+            <div class="flex items-center mb-4">
+                <div class="rounded-full p-3 mr-3 flex-shrink-0" style="background-color: var(--gold-100);">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">No Account Required (for Recipients)</h3>
+            </div>
+            <p class="text-gray-600">
+                Recipients can claim funds without already having an account. They'll be guided through a simple setup process.
+            </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card transition-all duration-300 hover:shadow-lg hover:border-gold-200 hover:transform hover:-translate-y-1" style="--hover-border-color: var(--gold-200);">
+            <div class="flex items-center mb-4">
+                <div class="rounded-full p-3 mr-3 flex-shrink-0" style="background-color: var(--gold-100);">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold-600);">
+                        <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm9 4a1 1 0 10-2 0v6a1 1 0 102 0V7zm-3 2a1 1 0 10-2 0v4a1 1 0 102 0V9zm-3 3a1 1 0 10-2 0v1a1 1 0 102 0v-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Transaction History</h3>
+            </div>
+            <p class="text-gray-600">
+                Keep track of all your transfers with detailed transaction history, making record-keeping simple.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-12 md:py-20 text-white rounded-3xl my-6 px-4 gradient-primary" style="background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-800) 100%);">
+    <div class="text-center">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4">Ready to send money with just an email?</h2>
+        <p class="text-base md:text-lg mb-8 max-w-3xl mx-auto">
+            Sign up today and experience the simplest way to transfer money. No complicated account numbers or routing codes - just an email address.
+        </p>
+        <a href="{% url 'register' %}" class="bg-white hover:bg-gray-100 font-medium rounded-lg text-lg px-6 md:px-8 py-3 text-center inline-flex items-center transition-all duration-300 shadow-lg hover:shadow-xl" style="color: var(--gold-600);">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Create Free Account
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Transaction History | ProfitsVibe{% endblock %}
+
+{% block head %}
+<style>
+    .transaction-row:hover {
+        background-color: rgba(243, 244, 246, 0.8);
+    }
+
+    .transaction-type-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Transaction History</h1>
+        <p class="text-gray-600">View and manage your payment history.</p>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-lg shadow-custom p-4 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+            <div class="flex items-center space-x-4">
+                <div>
+                    <label for="transaction-type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <select id="transaction-type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="all">All</option>
+                        <option value="payment">Payments</option>
+                        <option value="request">Requests</option>
+                        <option value="deposit">Deposits</option>
+                        <option value="withdrawal">Withdrawals</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transaction-status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select id="transaction-status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="all">All</option>
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transaction-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <select id="transaction-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="all">All time</option>
+                        <option value="30">Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                        <option value="year">This year</option>
+                    </select>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input type="search" id="transaction-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Search transactions...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction List -->
+    <div class="bg-white rounded-lg shadow-custom overflow-hidden">
+        {% if transactions %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From/To</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for transaction in transactions %}
+                            <tr class="transaction-row">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="transaction-type-icon mr-3
+                                            {% if transaction.transaction_type == 'payment' and transaction.sender == user %}
+                                                bg-red-100 text-red-600
+                                            {% elif transaction.transaction_type == 'payment' and transaction.recipient == user %}
+                                                bg-green-100 text-green-600
+                                            {% elif transaction.transaction_type == 'deposit' %}
+                                                bg-blue-100 text-blue-600
+                                            {% elif transaction.transaction_type == 'withdrawal' %}
+                                                bg-purple-100 text-purple-600
+                                            {% elif transaction.transaction_type == 'request' %}
+                                                bg-yellow-100 text-yellow-600
+                                            {% endif %}
+                                        ">
+                                            {% if transaction.transaction_type == 'payment' and transaction.sender == user %}
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            {% elif transaction.transaction_type == 'payment' and transaction.recipient == user %}
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            {% elif transaction.transaction_type == 'deposit' %}
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"></path>
+                                                </svg>
+                                            {% elif transaction.transaction_type == 'withdrawal' %}
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"></path>
+                                                </svg>
+                                            {% elif transaction.transaction_type == 'request' %}
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900">{{ transaction.created_at|date:"M d, Y" }}</div>
+                                            <div class="text-xs text-gray-500">{{ transaction.created_at|time:"g:i A" }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                        {% if transaction.transaction_type == 'payment' and transaction.sender == user %}
+                                            Payment sent
+                                        {% elif transaction.transaction_type == 'payment' and transaction.recipient == user %}
+                                            Payment received
+                                        {% elif transaction.transaction_type == 'deposit' %}
+                                            Wallet funding
+                                        {% elif transaction.transaction_type == 'withdrawal' %}
+                                            Withdrawal to bank
+                                        {% elif transaction.transaction_type == 'request' %}
+                                            Payment request
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-xs text-gray-500">{{ transaction.description|default:"-" }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                        {% if transaction.transaction_type == 'payment' and transaction.sender == user %}
+                                            To: {{ transaction.recipient.get_full_name|default:transaction.recipient_email }}
+                                        {% elif transaction.transaction_type == 'payment' and transaction.recipient == user %}
+                                            From: {{ transaction.sender.get_full_name|default:transaction.sender.username }}
+                                        {% elif transaction.transaction_type == 'deposit' %}
+                                            From: Bank account
+                                        {% elif transaction.transaction_type == 'withdrawal' %}
+                                            To: Bank account
+                                        {% elif transaction.transaction_type == 'request' %}
+                                            To: {{ transaction.recipient.get_full_name|default:transaction.recipient_email }}
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        {% if transaction.status == 'completed' %}
+                                            bg-green-100 text-green-800
+                                        {% elif transaction.status == 'pending' %}
+                                            bg-yellow-100 text-yellow-800
+                                        {% elif transaction.status == 'failed' %}
+                                            bg-red-100 text-red-800
+                                        {% elif transaction.status == 'cancelled' %}
+                                            bg-gray-100 text-gray-800
+                                        {% endif %}
+                                    ">
+                                        {{ transaction.status|title }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="text-sm font-medium
+                                        {% if transaction.transaction_type == 'payment' and transaction.sender == user or transaction.transaction_type == 'withdrawal' %}
+                                            text-red-600
+                                        {% elif transaction.transaction_type == 'payment' and transaction.recipient == user or transaction.transaction_type == 'deposit' %}
+                                            text-green-600
+                                        {% else %}
+                                            text-gray-900
+                                        {% endif %}
+                                    ">
+                                        {% if transaction.transaction_type == 'payment' and transaction.sender == user or transaction.transaction_type == 'withdrawal' %}
+                                            -${{ transaction.amount }}
+                                        {% elif transaction.transaction_type == 'payment' and transaction.recipient == user or transaction.transaction_type == 'deposit' %}
+                                            +${{ transaction.amount }}
+                                        {% else %}
+                                            ${{ transaction.amount }}
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="border-t border-gray-200 px-6 py-4 flex items-center justify-between">
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-gray-700">
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">{{ transactions|length }}</span> of <span class="font-medium">{{ transactions|length }}</span> transactions
+                        </p>
+                    </div>
+                    <div>
+                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Previous</span>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                            <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                1
+                            </a>
+                            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Next</span>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="p-8 text-center">
+                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No transactions yet</h3>
+                <p class="text-gray-600 mb-4">You haven't made any transactions yet. Start by sending or requesting money.</p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <a href="{% url 'send_money' %}" class="btn-primary">Send Money</a>
+                    <a href="{% url 'request_money' %}" class="btn-secondary">Request Money</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Download Transactions -->
+    <div class="mt-6 flex justify-end">
+        <div class="dropdown relative" x-data="{ open: false }">
+            <button @click="open = !open" class="btn-outline flex items-center" type="button">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+                Export
+            </button>
+            <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Export as CSV</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Export as PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeFilter = document.getElementById('transaction-type');
+        const statusFilter = document.getElementById('transaction-status');
+        const dateFilter = document.getElementById('transaction-date');
+        const searchInput = document.getElementById('transaction-search');
+
+        // In a real application, you would implement filtering logic here
+        // For this demo, we'll just add event listeners
+
+        typeFilter.addEventListener('change', function() {
+            // Filter transactions by type
+            console.log('Type filter changed to:', this.value);
+        });
+
+        statusFilter.addEventListener('change', function() {
+            // Filter transactions by status
+            console.log('Status filter changed to:', this.value);
+        });
+
+        dateFilter.addEventListener('change', function() {
+            // Filter transactions by date range
+            console.log('Date filter changed to:', this.value);
+        });
+
+        searchInput.addEventListener('input', function() {
+            // Search transactions
+            console.log('Search query:', this.value);
+        });
+    });
+</script>
+{% endblock %}

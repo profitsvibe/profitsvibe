@@ -1,0 +1,661 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Account Settings | Profitsvibe{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 max-w-6xl">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Account Settings</h1>
+        <p class="text-gray-600 dark:text-gray-400">Manage your preferences, security, and payment methods</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Settings Navigation Sidebar -->
+        <div class="lg:col-span-1 mx-auto lg:mx-0 w-full max-w-xs">
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 sticky top-24">
+                <!-- Header -->
+                <div class="bg-amber-600 text-white px-4 py-3 rounded-t-lg text-center">
+                    <h2 class="font-semibold">Settings</h2>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="p-4 space-y-2" aria-label="Settings">
+                    <button type="button" id="account-tab"
+                        class="w-full text-center flex items-center justify-center p-2 rounded-lg text-white bg-amber-600 hover:bg-amber-700 font-medium text-sm">
+                        <i class="fas fa-user-circle mr-3"></i> Account
+                    </button>
+                    <button type="button" id="security-tab"
+                        class="w-full text-center flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-amber-700 font-medium text-sm dark:text-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-shield-alt mr-3"></i> Security
+                    </button>
+                    <button type="button" id="payment-methods-tab"
+                        class="w-full text-center flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-amber-700 font-medium text-sm dark:text-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-credit-card mr-3"></i> Payment Methods
+                    </button>
+                    <button type="button" id="notifications-tab"
+                        class="w-full text-center flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-amber-700 font-medium text-sm dark:text-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-bell mr-3"></i> Notifications
+                    </button>
+                    <button type="button" id="privacy-tab"
+                        class="w-full text-center flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-amber-700 font-medium text-sm dark:text-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-lock mr-3"></i> Privacy
+                    </button>
+                    <button type="button" id="advanced-tab"
+                        class="w-full text-center flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-amber-700 font-medium text-sm dark:text-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-cog mr-3"></i> Advanced
+                    </button>
+                </nav>
+
+                <!-- User Profile Preview -->
+                <div class="p-4 bg-gray-50 border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600 rounded-b-lg text-center">
+                    <div class="flex flex-col items-center">
+                        <img class="h-14 w-14 rounded-full object-cover border-2 border-amber-200 mb-2"
+                             src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                             alt="{{ user.username }}">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">{{ user.get_full_name|default:user.username }}</p>
+                            <a href="{% url 'profile' %}" class="text-xs text-amber-700 hover:text-amber-800 dark:text-amber-500 dark:hover:text-amber-400">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="lg:col-span-3 space-y-8">
+            <!-- Account Settings Section -->
+            <div id="account-content" class="settings-content">
+                <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Account Information</h2>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-amber-900 dark:text-amber-300">Basic Info</span>
+                    </div>
+
+                    <!-- Account Form -->
+                    <form method="post" class="space-y-6">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="account_settings">
+
+                        <!-- Username Display -->
+                        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 mb-4">
+                            <div class="mb-3">
+                                <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">
+                                    <i class="fas fa-id-badge text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="text-center mb-3">
+                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">Username</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Your unique identifier on Profitsvibe</p>
+                            </div>
+                            <div class="w-full max-w-xs">
+                                <input type="text" id="id_username" name="username" value="{{ user.username }}"
+                                      class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 text-center dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500" disabled>
+                            </div>
+                        </div>
+
+                        <!-- Email and Timezone -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="mx-auto w-full">
+                                <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Email Address</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="far fa-envelope text-gray-500 dark:text-gray-400"></i>
+                                    </div>
+                                    <input type="email" id="id_email" name="email" value="{{ user.email }}"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500" placeholder="your.email@example.com">
+                                </div>
+                                {% if form.email.errors %}
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500 text-center">{{ form.email.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="mx-auto w-full">
+                                <label for="id_timezone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Time Zone</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="far fa-clock text-gray-500 dark:text-gray-400"></i>
+                                    </div>
+                                    <select id="id_timezone" name="timezone"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500">
+                                        <option value="UTC" {% if user.profile.timezone == "UTC" %}selected{% endif %}>UTC (Coordinated Universal Time)</option>
+                                        <option value="America/New_York" {% if user.profile.timezone == "America/New_York" %}selected{% endif %}>Eastern Time (US & Canada)</option>
+                                        <option value="America/Chicago" {% if user.profile.timezone == "America/Chicago" %}selected{% endif %}>Central Time (US & Canada)</option>
+                                        <option value="America/Denver" {% if user.profile.timezone == "America/Denver" %}selected{% endif %}>Mountain Time (US & Canada)</option>
+                                        <option value="America/Los_Angeles" {% if user.profile.timezone == "America/Los_Angeles" %}selected{% endif %}>Pacific Time (US & Canada)</option>
+                                        <option value="Europe/London" {% if user.profile.timezone == "Europe/London" %}selected{% endif %}>London</option>
+                                        <option value="Europe/Paris" {% if user.profile.timezone == "Europe/Paris" %}selected{% endif %}>Paris</option>
+                                        <option value="Asia/Tokyo" {% if user.profile.timezone == "Asia/Tokyo" %}selected{% endif %}>Tokyo</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Language and Currency -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="mx-auto w-full">
+                                <label for="id_language" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Language</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-language text-gray-500 dark:text-gray-400"></i>
+                                    </div>
+                                    <select id="id_language" name="language"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500">
+                                        <option value="en-US" {% if user.profile.language == "en-US" %}selected{% endif %}>English (US)</option>
+                                        <option value="en-GB" {% if user.profile.language == "en-GB" %}selected{% endif %}>English (UK)</option>
+                                        <option value="es" {% if user.profile.language == "es" %}selected{% endif %}>Spanish</option>
+                                        <option value="fr" {% if user.profile.language == "fr" %}selected{% endif %}>French</option>
+                                        <option value="de" {% if user.profile.language == "de" %}selected{% endif %}>German</option>
+                                        <option value="zh" {% if user.profile.language == "zh" %}selected{% endif %}>Chinese</option>
+                                        <option value="ja" {% if user.profile.language == "ja" %}selected{% endif %}>Japanese</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mx-auto w-full">
+                                <label for="id_currency" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Default Currency</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-dollar-sign text-gray-500 dark:text-gray-400"></i>
+                                    </div>
+                                    <select id="id_currency" name="currency"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500">
+                                        <option value="USD" {% if user.profile.currency == "USD" %}selected{% endif %}>USD - US Dollar</option>
+                                        <option value="EUR" {% if user.profile.currency == "EUR" %}selected{% endif %}>EUR - Euro</option>
+                                        <option value="GBP" {% if user.profile.currency == "GBP" %}selected{% endif %}>GBP - British Pound</option>
+                                        <option value="CAD" {% if user.profile.currency == "CAD" %}selected{% endif %}>CAD - Canadian Dollar</option>
+                                        <option value="AUD" {% if user.profile.currency == "AUD" %}selected{% endif %}>AUD - Australian Dollar</option>
+                                        <option value="JPY" {% if user.profile.currency == "JPY" %}selected{% endif %}>JPY - Japanese Yen</option>
+                                        <option value="CNY" {% if user.profile.currency == "CNY" %}selected{% endif %}>CNY - Chinese Yuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+                            <button type="submit" class="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+                                <i class="fas fa-save mr-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security Settings Section -->
+            <div id="security-content" class="settings-content hidden">
+                <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Security Settings</h2>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                            <i class="fas fa-shield-alt mr-1"></i>Protected
+                        </span>
+                    </div>
+
+                    <!-- Security Info Alert -->
+                    <div class="flex p-4 mb-4 text-amber-800 border-t-4 border-amber-300 bg-amber-50 dark:text-amber-300 dark:bg-gray-800 dark:border-amber-800" role="alert">
+                        <i class="fas fa-info-circle flex-shrink-0 w-5 h-5"></i>
+                        <div class="ml-3 text-sm font-medium">
+                            <h3 class="font-medium">Security Status</h3>
+                            <div class="mt-2">
+                                <p>Your account security is <span class="font-semibold">Moderate</span>. We recommend enabling two-factor authentication for additional protection.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Section -->
+                    <div class="mb-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 rounded-t-lg text-center">
+                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Password</h3>
+                        </div>
+
+                        <div class="p-4">
+                            <form method="post" class="space-y-4 max-w-lg mx-auto">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="change_password">
+
+                                <!-- Current Password -->
+                                <div>
+                                    <label for="id_current_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Current Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="id_current_password" name="current_password"
+                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500">
+                                        <button type="button" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    {% if password_form.current_password.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-500 text-center">{{ password_form.current_password.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- New Password -->
+                                <div>
+                                    <label for="id_new_password1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">New Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="id_new_password1" name="new_password1"
+                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500">
+                                        <button type="button" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    {% if password_form.new_password1.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-500 text-center">{{ password_form.new_password1.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Confirm New Password -->
+                                <div>
+                                    <label for="id_new_password2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Confirm New Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="id_new_password2" name="new_password2"
+                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-500 dark:focus:border-amber-500">
+                                        <button type="button" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    {% if password_form.new_password2.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-500 text-center">{{ password_form.new_password2.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Password Strength Meter -->
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Password Strength</span>
+                                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400" id="strength-text">Weak</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5 mb-1 dark:bg-gray-700">
+                                        <div class="bg-red-500 h-1.5 rounded-full dark:bg-red-600" style="width: 20%" id="strength-meter"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 text-center" id="password-suggestion">
+                                        Use at least 8 characters with a mix of letters, numbers, and symbols
+                                    </p>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="pt-2 flex justify-center">
+                                    <button type="submit" class="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+                                        <i class="fas fa-key mr-2"></i>Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Two-Factor Authentication -->
+                    <div class="mb-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 rounded-t-lg text-center">
+                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Two-Factor Authentication</h3>
+                        </div>
+
+                        <div class="p-4 max-w-lg mx-auto">
+                            <!-- 2FA Toggle -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Two-factor authentication</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Add an extra layer of security</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" {% if user.profile.two_factor_enabled %}checked{% endif %}>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 dark:peer-focus:ring-amber-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-amber-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- Authenticator App Option -->
+                            <div class="p-4 mb-4 bg-gray-50 rounded-lg dark:bg-gray-700">
+                                <div class="flex flex-col items-center text-center">
+                                    <i class="fas fa-mobile-alt text-amber-600 dark:text-amber-400 text-lg mb-2"></i>
+                                    <div class="mb-2">
+                                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">Authenticator App</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Use an app like Google Authenticator</p>
+                                    </div>
+                                    <button type="button" class="text-xs text-amber-700 hover:text-amber-800 font-medium dark:text-amber-500 dark:hover:text-amber-400">
+                                        {% if user.profile.two_factor_enabled %}Manage{% else %}Setup{% endif %}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- SMS Option -->
+                            <div class="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
+                                <div class="flex flex-col items-center text-center">
+                                    <i class="fas fa-sms text-amber-600 dark:text-amber-400 text-lg mb-2"></i>
+                                    <div class="mb-2">
+                                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">SMS Authentication</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Receive verification codes via text message</p>
+                                    </div>
+                                    <button type="button" class="text-xs text-amber-700 hover:text-amber-800 font-medium dark:text-amber-500 dark:hover:text-amber-400">
+                                        {% if user.profile.sms_2fa_enabled %}Manage{% else %}Setup{% endif %}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Login Sessions -->
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 rounded-t-lg">
+                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Active Sessions</h3>
+                            <button type="button" class="text-xs text-red-600 hover:text-red-800 font-medium dark:text-red-500 dark:hover:text-red-400">
+                                <i class="fas fa-sign-out-alt mr-1"></i> Sign Out All Other Devices
+                            </button>
+                        </div>
+
+                        <div class="p-4 max-w-lg mx-auto">
+                            <!-- Current Session -->
+                            <div class="flex flex-col items-center p-4 bg-green-50 rounded-lg border border-green-100 mb-4 dark:bg-green-900/20 dark:border-green-900 text-center">
+                                <div class="mb-3">
+                                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                                        <i class="fas fa-laptop"></i>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Windows PC (Chrome)</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">New York, USA • Now (Current session)</p>
+                                </div>
+                                <div>
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Current</span>
+                                </div>
+                            </div>
+
+                            <!-- Other Session -->
+                            <div class="flex flex-col items-center p-4 bg-white rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700 text-center">
+                                <div class="mb-3">
+                                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">iPhone (Safari)</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">New York, USA • Yesterday, 8:45 PM</p>
+                                </div>
+                                <div>
+                                    <button type="button" class="text-xs text-red-600 hover:text-red-800 font-medium dark:text-red-500 dark:hover:text-red-400">
+                                        Sign Out
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div id="payment-methods-content" class="settings-content hidden">
+                <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Payment Methods</h2>
+                        <button type="button" class="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+                            <i class="fas fa-plus-circle mr-1"></i> Add New
+                        </button>
+                    </div>
+
+                    <!-- Bank Accounts -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Your Bank Accounts</h3>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">For Withdrawals</span>
+                        </div>
+
+                        <div class="space-y-4 max-w-2xl mx-auto">
+                            {% if bank_accounts %}
+                                {% for account in bank_accounts %}
+                                    <div class="flex flex-col items-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-amber-300 transition-colors dark:bg-gray-800 dark:border-gray-700 dark:hover:border-amber-700 text-center">
+                                        <div class="mb-3">
+                                            <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                                                <i class="fas fa-university text-xl"></i>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ account.bank_name }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                Checking Account •••• {{ account.last_four }}
+                                                {% if account.is_default %}
+                                                    <span class="ml-2 bg-amber-100 text-amber-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-amber-900 dark:text-amber-300">Default</span>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="flex justify-center space-x-2">
+                                            <button type="button" class="py-1.5 px-3 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                <i class="fas fa-pencil-alt mr-1"></i> Edit
+                                            </button>
+                                            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+                                                <i class="fas fa-trash-alt mr-1"></i> Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-amber-300 transition-colors dark:border-gray-600 dark:hover:border-amber-800">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <button type="button" class="py-2 px-4 text-amber-700 bg-white hover:bg-amber-50 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm dark:bg-gray-800 dark:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-amber-300 dark:focus:ring-amber-800 border border-amber-300 dark:border-amber-600">
+                                            <i class="fas fa-plus mr-2"></i> Add Bank Account
+                                        </button>
+                                    </div>
+                                    <div class="opacity-25">
+                                        <div class="mb-4">
+                                            <i class="fas fa-university text-gray-400 text-4xl dark:text-gray-500"></i>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-gray-900 mb-1 dark:text-gray-400">No bank accounts added</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-500">Add a bank account to withdraw funds</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Credit/Debit Cards -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Your Cards</h3>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">For Payments</span>
+                        </div>
+
+                        <!-- Cards Display -->
+                        <div class="space-y-4">
+                            {% if cards %}
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                                    {% for card in cards %}
+                                        <div class="relative bg-gradient-to-r from-gray-800 to-gray-700 rounded-xl p-4 shadow-lg overflow-hidden group dark:from-gray-900 dark:to-gray-800">
+                                            <div class="absolute right-0 top-0 h-16 w-16 opacity-20 rounded-bl-full bg-white"></div>
+
+                                            {% if card.brand == 'visa' %}
+                                                <i class="fab fa-cc-visa text-white text-2xl absolute top-3 right-3"></i>
+                                            {% elif card.brand == 'mastercard' %}
+                                                <i class="fab fa-cc-mastercard text-white text-2xl absolute top-3 right-3"></i>
+                                            {% elif card.brand == 'amex' %}
+                                                <i class="fab fa-cc-amex text-white text-2xl absolute top-3 right-3"></i>
+                                            {% else %}
+                                                <i class="far fa-credit-card text-white text-2xl absolute top-3 right-3"></i>
+                                            {% endif %}
+
+                                            <div class="mb-6 text-center">
+                                                <p class="text-gray-300 text-xs font-light">Card Number</p>
+                                                <p class="text-white text-lg tracking-widest font-medium">•••• •••• •••• {{ card.last_four }}</p>
+                                            </div>
+
+                                            <div class="flex justify-between">
+                                                <div>
+                                                    <p class="text-gray-300 text-xs font-light">Card Holder</p>
+                                                    <p class="text-white text-sm font-medium">{{ user.get_full_name|default:user.username }}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-gray-300 text-xs font-light">Expires</p>
+                                                    <p class="text-white text-sm font-medium">{{ card.exp_month }}/{{ card.exp_year }}</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Hover actions -->
+                                            <div class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button type="button" class="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none dark:focus:ring-gray-800">
+                                                    <i class="fas fa-pencil-alt mr-1"></i> Edit
+                                                </button>
+                                                <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+                                                    <i class="fas fa-trash-alt mr-1"></i> Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    <!-- Add Card Button -->
+                                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center hover:border-amber-300 transition-colors cursor-pointer dark:border-gray-600 dark:hover:border-amber-800 text-center">
+                                        <div class="mb-3">
+                                            <i class="far fa-credit-card text-gray-400 text-3xl dark:text-gray-500"></i>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-gray-900 mb-1 dark:text-white">Add a new card</h3>
+                                        <p class="text-xs text-gray-500 mb-3 text-center dark:text-gray-400">Add a credit or debit card for payments</p>
+                                        <button type="button" class="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+                                            <i class="fas fa-plus mr-1"></i> Add Card
+                                        </button>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-amber-300 transition-colors dark:border-gray-600 dark:hover:border-amber-800 max-w-lg mx-auto">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <button type="button" class="py-2 px-4 text-amber-700 bg-white hover:bg-amber-50 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm dark:bg-gray-800 dark:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-amber-300 dark:focus:ring-amber-800 border border-amber-300 dark:border-amber-600">
+                                            <i class="fas fa-plus mr-2"></i> Add Card
+                                        </button>
+                                    </div>
+                                    <div class="opacity-25">
+                                        <div class="mb-4">
+                                            <i class="far fa-credit-card text-gray-400 text-4xl dark:text-gray-500"></i>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-gray-900 mb-1 dark:text-gray-400">No cards added</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-500">Add a debit or credit card to make payments</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other settings content sections (notifications, privacy, advanced) can be added here following the same pattern -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab navigation
+        const tabButtons = document.querySelectorAll('[id$="-tab"]');
+        const tabContents = document.querySelectorAll('.settings-content');
+
+        // Function to show the selected tab
+        function showTab(tabId) {
+            // Hide all content sections
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Remove active class from all tabs
+            tabButtons.forEach(button => {
+                button.classList.remove('text-white', 'bg-amber-600', 'hover:bg-amber-700');
+                button.classList.add('text-gray-700', 'hover:bg-gray-100', 'hover:text-amber-700', 'dark:text-gray-200', 'dark:hover:bg-gray-700');
+            });
+
+            // Show the selected content
+            const contentId = tabId.replace('-tab', '-content');
+            document.getElementById(contentId).classList.remove('hidden');
+
+            // Add active class to the selected tab
+            document.getElementById(tabId).classList.remove('text-gray-700', 'hover:bg-gray-100', 'hover:text-amber-700', 'dark:text-gray-200', 'dark:hover:bg-gray-700');
+            document.getElementById(tabId).classList.add('text-white', 'bg-amber-600', 'hover:bg-amber-700');
+        }
+
+        // Set up click handlers for tabs
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                showTab(this.id);
+            });
+        });
+
+        // Password toggle visibility
+        const togglePassword = document.querySelectorAll('.toggle-password');
+        togglePassword.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                // Toggle icon
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+        });
+
+        // Password strength meter
+        const passwordInput = document.getElementById('id_new_password1');
+        const strengthMeter = document.getElementById('strength-meter');
+        const strengthText = document.getElementById('strength-text');
+        const passwordSuggestion = document.getElementById('password-suggestion');
+
+        if (passwordInput && strengthMeter && strengthText && passwordSuggestion) {
+            passwordInput.addEventListener('input', function() {
+                const value = this.value;
+                let strength = 0;
+                let suggestions = [];
+
+                // Length check
+                if (value.length >= 8) {
+                    strength += 25;
+                } else {
+                    suggestions.push('Use at least 8 characters');
+                }
+
+                // Lowercase and uppercase check
+                if (value.match(/[a-z]/) && value.match(/[A-Z]/)) {
+                    strength += 25;
+                } else {
+                    suggestions.push('Mix uppercase and lowercase letters');
+                }
+
+                // Number check
+                if (value.match(/[0-9]/)) {
+                    strength += 25;
+                } else {
+                    suggestions.push('Include at least one number');
+                }
+
+                // Special character check
+                if (value.match(/[^a-zA-Z0-9]/)) {
+                    strength += 25;
+                } else {
+                    suggestions.push('Include at least one special character');
+                }
+
+                // Update strength meter
+                strengthMeter.style.width = strength + '%';
+
+                // Update color based on strength
+                if (strength < 25) {
+                    strengthMeter.className = 'bg-red-500 h-1.5 rounded-full dark:bg-red-600';
+                    strengthText.textContent = 'Very Weak';
+                } else if (strength < 50) {
+                    strengthMeter.className = 'bg-orange-500 h-1.5 rounded-full dark:bg-orange-600';
+                    strengthText.textContent = 'Weak';
+                } else if (strength < 75) {
+                    strengthMeter.className = 'bg-yellow-500 h-1.5 rounded-full dark:bg-yellow-600';
+                    strengthText.textContent = 'Medium';
+                } else if (strength < 100) {
+                    strengthMeter.className = 'bg-lime-500 h-1.5 rounded-full dark:bg-lime-600';
+                    strengthText.textContent = 'Strong';
+                } else {
+                    strengthMeter.className = 'bg-green-500 h-1.5 rounded-full dark:bg-green-600';
+                    strengthText.textContent = 'Very Strong';
+                }
+
+                // Update suggestion text
+                if (suggestions.length > 0) {
+                    passwordSuggestion.textContent = suggestions.join(', ');
+                } else {
+                    passwordSuggestion.textContent = 'Your password is strong!';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

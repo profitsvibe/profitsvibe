@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | ProfitsVibe{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <!-- Welcome Header -->
+    <div class="p-4 mb-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome back, {{ user.get_full_name|default:user.username }}!</h1>
+        <p class="text-gray-600 dark:text-gray-400">Manage your money, send payments, and view your transaction history.</p>
+    </div>
+
+    <!-- Balance & Quick Actions -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Balance Card -->
+        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase mb-2">Your Balance</h2>
+            <div class="flex items-end">
+                <span class="text-3xl font-bold text-gray-900 dark:text-white">${{ wallet.balance }}</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 ml-2 mb-1">{{ wallet.currency }}</span>
+            </div>
+            <div class="mt-4 space-y-2">
+                <a href="{% url 'fund_wallet' %}" class="text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800 w-full text-center inline-block">Add Money</a>
+                <a href="{% url 'withdraw_funds' %}" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 w-full text-center inline-block">Withdraw</a>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 lg:col-span-2">
+            <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <a href="{% url 'send_money' %}" class="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
+                    <div class="w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-600 rounded-full mb-3 dark:bg-amber-900 dark:text-amber-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8z"></path>
+                            <path d="M12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">Send Money</span>
+                </a>
+
+                <a href="{% url 'request_money' %}" class="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
+                    <div class="w-12 h-12 flex items-center justify-center bg-green-100 text-green-600 rounded-full mb-3 dark:bg-green-900 dark:text-green-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8z"></path>
+                            <path d="M12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">Request Money</span>
+                </a>
+
+                <a href="{% url 'transaction_history' %}" class="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
+                    <div class="w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-600 rounded-full mb-3 dark:bg-amber-900 dark:text-amber-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">Transactions</span>
+                </a>
+
+                <a href="{% url 'request_money' %}" class="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
+                    <div class="w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-600 rounded-full mb-3 dark:bg-amber-900 dark:text-amber-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">Requests</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Requests Alert -->
+    {% if pending_requests %}
+    <div class="flex p-4 mb-6 text-yellow-800 border-t-4 border-yellow-300 bg-yellow-50 dark:text-yellow-300 dark:bg-gray-800 dark:border-yellow-800" role="alert">
+        <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        <div class="ml-3 text-sm font-medium">
+            You have {{ pending_requests|length }} pending payment {% if pending_requests|length == 1 %}request{% else %}requests{% endif %}.
+            <a href="{% url 'payment_requests' %}" class="font-semibold underline hover:text-yellow-900 dark:hover:text-yellow-100">
+                View them here
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Transactions -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Recent Sent -->
+        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Sent</h2>
+                <a href="{% url 'transaction_history' %}" class="text-sm font-medium text-amber-600 dark:text-amber-500 hover:underline">View All</a>
+            </div>
+
+            {% if sent_transactions %}
+                <div class="space-y-4">
+                    {% for transaction in sent_transactions %}
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg dark:bg-gray-700">
+                        <div class="flex-shrink-0 mr-3">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center dark:bg-red-900">
+                                <svg class="w-5 h-5 text-red-500 dark:text-red-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                To: {{ transaction.recipient.get_full_name|default:transaction.recipient_email }}
+                            </p>
+                            <p class="text-xs text-gray-500 truncate dark:text-gray-400">
+                                {{ transaction.created_at|date:"M d, Y" }} • {{ transaction.description|default:"No description" }}
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0 ml-2">
+                            <span class="text-sm font-medium text-red-600 dark:text-red-400">-${{ transaction.amount }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="p-6 text-center bg-gray-50 rounded-lg dark:bg-gray-700">
+                    <p class="text-gray-500 dark:text-gray-400 mb-3">You haven't sent any payments yet.</p>
+                    <a href="{% url 'send_money' %}" class="text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800 inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8z"></path>
+                            <path d="M12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"></path>
+                        </svg>
+                        Send Money
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Recent Received -->
+        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Received</h2>
+                <a href="{% url 'transaction_history' %}" class="text-sm font-medium text-amber-600 dark:text-amber-500 hover:underline">View All</a>
+            </div>
+
+            {% if received_transactions %}
+                <div class="space-y-4">
+                    {% for transaction in received_transactions %}
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg dark:bg-gray-700">
+                        <div class="flex-shrink-0 mr-3">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center dark:bg-green-900">
+                                <svg class="w-5 h-5 text-green-500 dark:text-green-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                From: {{ transaction.sender.get_full_name|default:transaction.sender.username }}
+                            </p>
+                            <p class="text-xs text-gray-500 truncate dark:text-gray-400">
+                                {{ transaction.created_at|date:"M d, Y" }} • {{ transaction.description|default:"No description" }}
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0 ml-2">
+                            <span class="text-sm font-medium text-green-600 dark:text-green-400">+${{ transaction.amount }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="p-6 text-center bg-gray-50 rounded-lg dark:bg-gray-700">
+                    <p class="text-gray-500 dark:text-gray-400 mb-3">You haven't received any payments yet.</p>
+                    <a href="{% url 'request_money' %}" class="text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800 inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8z"></path>
+                            <path d="M12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"></path>
+                        </svg>
+                        Request Money
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Activity Summary -->
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Activity Summary</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Card 1: Total Sent -->
+            <div class="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Sent (This Month)</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">$0.00</p>
+            </div>
+
+            <!-- Card 2: Total Received -->
+            <div class="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Received (This Month)</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">$0.00</p>
+            </div>
+
+            <!-- Card 3: Pending Requests -->
+            <div class="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Pending Payment Requests</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ pending_requests|length }}</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
